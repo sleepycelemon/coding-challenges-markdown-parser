@@ -1,22 +1,41 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+  type ParserResult = {
+    html: String;
+    ast: String;
+  };
 
-  
-  let parse = (v: string) => ""
-  let value = $state("")
-  let output = $derived(parse(value))
+  import { onMount } from "svelte";
+
+  let parse = (v: string): ParserResult => ({
+    ast: "",
+    html: "",
+  });
+
+  let value = $state("");
+  let output: ParserResult = $derived(parse(value));
+
+  let astTab = $state(true)
+
+  $effect(() => console.log(output));
 
   onMount(() => {
-    parse = window?.parse
-  })
+    // @ts-ignore
+    parse = window?.parse;
+  });
 </script>
 
 <main>
   <section>
-    <textarea bind:value={value} id="input"></textarea>
+    <textarea bind:value id="input"></textarea>
   </section>
   <section id="output">
-    {output}
+    <button onclick={() => astTab = !astTab}>Toggle Tab</button>
+    <br />
+    {#if astTab}
+      <pre>{output.ast}</pre>
+    {:else}
+      {@html output.html}
+    {/if}
   </section>
 </main>
 
