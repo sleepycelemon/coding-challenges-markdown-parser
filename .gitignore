@@ -1,0 +1,37 @@
+# root-level ignores (just in case)
+.DS_Store
+node_modules/
+dist/
+*.log
+
+# Rust: parser/
+parser/target/
+parser/Cargo.lock
+parser/.cargo/
+parser/*.rs.bk
+parser/.idea/
+parser/.vscode/
+
+# JS: ui/
+ui/node_modules/
+ui/dist/
+ui/build/
+ui/.next/
+ui/.turbo/
+ui/.cache/
+ui/package-lock.json
+ui/yarn.lock
+ui/pnpm-lock.yaml
+ui/.env
+ui/.env.*
+
+# general IDE/editor noise
+*.swp
+*.swo
+*.bak
+*.tmp
+*.old
+*~
+
+# VSCode
+.vscode/
