@@ -14,7 +14,7 @@
   let value = $state("");
   let output: ParserResult = $derived(parse(value));
 
-  let astTab = $state(true)
+  let astTab = $state(false);
 
   $effect(() => console.log(output));
 
@@ -26,16 +26,24 @@
 
 <main>
   <section>
-    <textarea bind:value id="input"></textarea>
+    <textarea placeholder="Write some markdown" bind:value id="input">
+    </textarea>
   </section>
   <section id="output">
-    <button onclick={() => astTab = !astTab}>Toggle Tab</button>
-    <br />
-    {#if astTab}
-      <pre>{output.ast}</pre>
-    {:else}
-      {@html output.html}
-    {/if}
+    <button onclick={() => (astTab = !astTab)}>
+      {#if astTab}
+        View rendered
+      {:else}
+        View AST
+      {/if}
+    </button>
+    <div>
+      {#if astTab}
+        <pre>{output.ast}</pre>
+      {:else}
+        {@html output.html}
+      {/if}
+    </div>
   </section>
 </main>
 
@@ -69,5 +77,14 @@
     font-size: inherit;
     box-sizing: border-box;
     resize: none;
+  }
+
+  button {
+    outline: none;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    width: 150px;
+    margin-bottom: 16px;
   }
 </style>

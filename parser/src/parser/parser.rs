@@ -2,14 +2,7 @@ use std::vec;
 
 use crate::tokenizer::types::{Token, TokenType};
 
-use super::handlers::{bold, heading, italic};
-
-#[derive(Debug, PartialEq, Eq)]
-pub enum TextFormatting {
-  Normal,
-  Bold,
-  BoldAndItalic,
-}
+use super::handlers::{bold, heading, italic, list, text};
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum NodeType {
@@ -20,6 +13,8 @@ pub enum NodeType {
   Italic(String),
   NewLine,
   Character(char),
+  List,
+  ListItem(String),
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -61,7 +56,7 @@ pub fn parse(mut tokens: Vec<Token>) -> Node {
     children: vec![]
   };
 
-  'outer: while !tokens.is_empty() {
+  while !tokens.is_empty() {
     match tokens.last().unwrap().t {
       TokenType::Heading => {
           let (new_tokens, node) = heading::parse(tokens);
@@ -79,14 +74,24 @@ pub fn parse(mut tokens: Vec<Token>) -> Node {
         tokens = new_tokens;
         doc.children.push(node);
       },
+      TokenType::ListItem => {
+        let (new_tokens, node) = list::parse(tokens);
+        tokens = new_tokens;
+        doc.children.push(node); 
+      },
        TokenType::NewLine => {
         doc.children.push(Node { ntype: NodeType::NewLine, children: vec![] });
         tokens.pop();
       },
       TokenType::Character => {
+        let (new_tokens, txt) = text::parse_characters(tokens);
+
+        tokens = new_tokens;
+        doc.children.push(Node { children: vec![], ntype: NodeType::Text(txt) });
+      },
+      TokenType::Space => {
         doc.children.push(Node { children: vec![], ntype: NodeType::Character(tokens.pop().unwrap().c) });
-      }
-      _ => break 'outer
+      },
     }
   }
 

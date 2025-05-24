@@ -5,7 +5,8 @@ pub enum TokenType {
   Bold,
   Space,
   Italic,
-  NewLine
+  NewLine,
+  ListItem,
 }
 
 #[derive(PartialEq, Eq, Debug)]

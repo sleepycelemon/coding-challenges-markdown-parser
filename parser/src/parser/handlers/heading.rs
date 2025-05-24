@@ -20,11 +20,6 @@ pub fn parse(mut tokens: Vec<Token>) -> (Vec<Token>, Node) {
         tokens = new_tokens;
         txt = new_text;
       },
-      TokenType::NewLine => {
-        tokens.pop();
-        txt.push('\n');
-        break 'outer;
-      }
       _ => {
         break 'outer;
       }

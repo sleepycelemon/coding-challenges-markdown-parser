@@ -1,5 +1,23 @@
 use crate::{tokenizer::types::{Token, TokenType}};
 
+// This function is used to parse free text.
+// It *only* parses until a non-character / non-space token is found, then returns.
+pub fn parse_characters(mut tokens: Vec<Token>) -> (Vec<Token>, String) {
+  let mut txt = String::new();
+
+  'outer: while !tokens.is_empty() {
+      match tokens.last().unwrap().t {
+        TokenType::Character | TokenType::Space => {
+          // we continue parsing.
+          txt.push(tokens.pop().unwrap().c);
+        },
+        _ => break 'outer
+      }
+    } 
+
+  return (tokens, txt); 
+}
+
 pub fn parse(mut tokens: Vec<Token>, terminator: TokenType) -> (Vec<Token>, String) {
   let mut txt = String::new();
 

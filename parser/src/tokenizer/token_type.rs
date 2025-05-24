@@ -1,7 +1,5 @@
 use super::types::{Token, TokenType};
 
-
-
 pub fn get_token(c: char) -> Token {
   match c {
     '#' => Token::make(c, TokenType::Heading),
@@ -9,6 +7,7 @@ pub fn get_token(c: char) -> Token {
     ' ' => Token::make(c, TokenType::Space),
     '_' => Token::make(c, TokenType::Italic),
     '\n' => Token::make(c, TokenType::NewLine),
+    '-' => Token::make(c, TokenType::ListItem),
     _ => Token::make(c, TokenType::Character)
   }
 }
